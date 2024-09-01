@@ -1,75 +1,75 @@
 {
-    "name": "marick/classless-migrations-for-laravel",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Marick van Tuil",
-            "email": "info@marickvantuil.nl"
-        }
-    ],
-    "require": {
-        "php": "^8.2"
-    },
-    "require-dev": {
-        "orchestra/testbench": "^8.0",
-        "thecodingmachine/phpstan-safe-rule": "^1.2",
-        "laravel/pint": "^1.13",
-        "larastan/larastan": "^2.9",
-        "nunomaduro/collision": "^7.8",
-        "doctrine/dbal": "^3.9"
-    },
-    "autoload": {
-        "psr-4": {
-            "Marick\\LaravelClasslessMigrations\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/",
-            "Factories\\": "factories/",
-            "Workbench\\App\\": "workbench/app/",
-            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
-            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Marick\\LaravelClasslessMigrations\\ClasslessMigrationsServiceProvider"
-            ]
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "scripts": {
-        "l10": [
-            "composer require laravel/framework:10.* orchestra/testbench:8.* --no-interaction --no-update",
-            "composer update --prefer-stable --prefer-dist --no-interaction"
-        ],
-        "pint": [
-            "pint"
-        ],
-        "larastan": [
-            "@php -d memory_limit=-1 vendor/bin/phpstan"
-        ],
-        "post-autoload-dump": [
-            "@clear",
-            "@prepare"
-        ],
-        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
-        "prepare": "@php vendor/bin/testbench package:discover --ansi",
-        "build": "@php vendor/bin/testbench workbench:build --ansi",
-        "serve": [
-            "Composer\\Config::disableProcessTimeout",
-            "@build",
-            "@php vendor/bin/testbench serve"
-        ],
-        "lint": [
-            "@php vendor/bin/pint",
-            "@php vendor/bin/phpstan analyse"
-        ],
-        "test": [
-            "@php vendor/bin/phpunit"
-        ]
+  "name": "marick/classless-migrations-for-laravel",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Marick van Tuil",
+      "email": "info@marickvantuil.nl"
     }
+  ],
+  "require": {
+    "php": "^8.2"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^8.0",
+    "thecodingmachine/phpstan-safe-rule": "^1.2",
+    "laravel/pint": "^1.13",
+    "larastan/larastan": "^2.9",
+    "nunomaduro/collision": "^7.8",
+    "doctrine/dbal": "^3.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "Marick\\LaravelClasslessMigrations\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/",
+      "Factories\\": "factories/",
+      "Workbench\\App\\": "workbench/app/",
+      "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+      "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Marick\\LaravelClasslessMigrations\\ClasslessMigrationsServiceProvider"
+      ]
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "scripts": {
+    "l10": [
+      "composer require laravel/framework:10.* orchestra/testbench:8.* --no-interaction --no-update",
+      "composer update --prefer-stable --prefer-dist --no-interaction"
+    ],
+    "pint": [
+      "pint"
+    ],
+    "larastan": [
+      "@php -d memory_limit=-1 vendor/bin/phpstan"
+    ],
+    "post-autoload-dump": [
+      "@clear",
+      "@prepare"
+    ],
+    "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+    "prepare": "@php vendor/bin/testbench package:discover --ansi",
+    "build": "@php vendor/bin/testbench workbench:build --ansi",
+    "serve": [
+      "Composer\\Config::disableProcessTimeout",
+      "@build",
+      "@php vendor/bin/testbench serve"
+    ],
+    "lint": [
+      "@php vendor/bin/pint",
+      "@php vendor/bin/phpstan analyse"
+    ],
+    "test": [
+      "@php vendor/bin/testbench package:test"
+    ]
+  }
 }

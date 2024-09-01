@@ -21,13 +21,16 @@ class ClasslessMigrator extends Migrator
 
     public function getMigrationName($path): string
     {
-        if (debug_backtrace(limit: 2)[1]['function'] ?? '' === 'pretendToRun') {
-            $runUp = collect(debug_backtrace(limit: 5))->firstWhere('function', 'runUp');
+        $backtrace = debug_backtrace(limit: 5);
 
-            if ($runUp) {
-                $path = head($runUp['args']);
-            }
+        $caller = $backtrace[1];
+        if ($caller['function'] === 'pretendToRun') {
+            $runUp = collect($backtrace)->firstWhere('function', 'runUp');
+
+            $path = $runUp['args'][0] ?? '';
         }
+
+        assert(is_string($path));
 
         return parent::getMigrationName($path);
     }
