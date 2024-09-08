@@ -11,10 +11,8 @@ class ClasslessMigrationsServiceProvider extends LaravelServiceProvider
     public function register(): void
     {
         $this->app->extend('migrator', function (): ClasslessMigrator {
-            $repository = app('migration.repository');
-
             return new ClasslessMigrator(
-                $repository,
+                app('migration.repository'),
                 app('db'),
                 app('files'),
                 app('events')

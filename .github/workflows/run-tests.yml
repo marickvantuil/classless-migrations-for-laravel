@@ -62,7 +62,7 @@ jobs:
     needs: access_check
     strategy:
       matrix:
-        db: [ 'mysql', 'pgsql' ]
+        db: [ 'mysql', 'pgsql', 'sqlite' ]
         payload:
           - { laravel: '11.*', php: '8.3', 'testbench': '9.*', collision: '8.*' }
           - { laravel: '11.*', php: '8.2', 'testbench': '9.*', collision: '8.*' }
@@ -87,7 +87,9 @@ jobs:
 
       - name: Set up MySQL and PostgreSQL
         run: |
-          MYSQL_PORT=3307 POSTGRES_PORT=5432 docker compose up ${{ matrix.db }} -d
+          if [ "${{ matrix.db }}" != "sqlite" ]; then
+            MYSQL_PORT=3307 POSTGRES_PORT=5432 docker compose up ${{ matrix.db }} -d
+          fi
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.payload.laravel }}" "orchestra/testbench:${{ matrix.payload.testbench }}" "nunomaduro/collision:${{ matrix.payload.collision }}" --no-interaction --no-update
@@ -102,6 +104,7 @@ jobs:
           fi
       - name: Execute tests
         env:
-          DB_DRIVER: ${{ matrix.db }}
+          DB_CONNECTION: ${{ matrix.db }}
         run: |
+          cp workbench/.env."$DB_CONNECTION" workbench/.env
           composer test

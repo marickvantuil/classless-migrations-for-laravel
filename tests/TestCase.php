@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Illuminate\Support\Facades\Artisan;
 use Marick\LaravelClasslessMigrations\ClasslessMigrationsServiceProvider;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
@@ -25,7 +26,16 @@ class TestCase extends Orchestra
             @unlink($file);
         }
 
-        $app['config']->set('database.connections.testing.database', database_path('database.sqlite'));
+        if (env('DB_CONNECTION') === 'sqlite') {
+            $app['config']->set('database.connections.testing.database', database_path('database.sqlite'));
+        }
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Artisan::call('db:wipe');
     }
 
     protected function getPackageProviders($app): array
