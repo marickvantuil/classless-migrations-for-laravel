@@ -20,3 +20,12 @@ Schema::create('posts', function (Blueprint $table) {
     $table->softDeletes();
 });
 ```
+
+# Installation
+
+```shell
+composer require marick/classless-migrations-for-laravel
+```
+
+That's all. You may now write classless migrations.
+
