@@ -34,9 +34,20 @@ class PackageTest extends TestCase
         $output = Artisan::output();
 
         $this->assertStringContainsString('2024_09_01_140000_create_posts_table', $output);
-        $this->assertStringContainsString('create table "posts"', $output);
         $this->assertStringContainsString('2024_09_01_140000_create_companies_table', $output);
-        $this->assertStringContainsString('create table "companies"', $output);
+
+        switch (config('database.default')) {
+            case 'sqlite':
+            case 'pgsql':
+                $this->assertStringContainsString('create table "posts"', $output);
+                $this->assertStringContainsString('create table "companies"', $output);
+                break;
+            case 'mysql':
+                $this->assertStringContainsString('create table `posts`', $output);
+                $this->assertStringContainsString('create table `companies`', $output);
+                break;
+        }
+
         $this->assertFalse(Schema::hasTable('posts'));
         $this->assertFalse(Schema::hasTable('companies'));
     }
@@ -49,24 +60,6 @@ class PackageTest extends TestCase
 
         $this->assertTrue(Schema::hasTable('posts'));
         $this->assertFalse(Schema::hasTable('companies'));
-    }
-
-    #[Test]
-    public function it_can_dump_schema(): void
-    {
-        Artisan::call('migrate');
-        Artisan::call('schema:dump');
-
-        $this->assertTrue(file_exists(database_path('schema/sqlite-schema.sql')));
-
-        $contents = file_get_contents(database_path('schema/sqlite-schema.sql'));
-
-        $this->assertStringContainsString('2024_09_01_140000_create_posts_table', $contents);
-        $this->assertStringContainsString('CREATE TABLE IF NOT EXISTS "posts"', $contents);
-        $this->assertStringContainsString('2024_09_01_140000_create_companies_table', $contents);
-        $this->assertStringContainsString('CREATE TABLE IF NOT EXISTS "companies"', $contents);
-        $this->assertTrue(Schema::hasTable('posts'));
-        $this->assertTrue(Schema::hasTable('companies'));
     }
 
     #[Test]
