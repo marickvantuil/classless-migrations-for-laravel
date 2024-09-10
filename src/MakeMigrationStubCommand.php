@@ -31,6 +31,8 @@ class MakeMigrationStubCommand extends Command
             );
         }
 
+        $this->components->info('Stubs published successfully.');
+
         return 0;
     }
 }
