@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schema;
 use PHPUnit\Framework\Attributes\Test;
 
+use function Safe\glob;
+
 class PackageTest extends TestCase
 {
     #[Test]
@@ -70,5 +72,17 @@ class PackageTest extends TestCase
         $this->assertTrue(file_exists(base_path('stubs/migration.create.stub')));
         $this->assertTrue(file_exists(base_path('stubs/migration.stub')));
         $this->assertTrue(file_exists(base_path('stubs/migration.update.stub')));
+    }
+
+    #[Test]
+    public function making_migrations_does_not_run_migrations(): void
+    {
+        Artisan::call('classless-migrations:make-stub');
+
+        Artisan::call('make:migration create_invoices_table --create=invoices');
+        Artisan::call('make:migration create_invoices2_table --create=invoices');
+        Artisan::call('make:migration create_invoices3_table --create=invoices');
+
+        $this->assertCount(3, glob(database_path('migrations/*.php')));
     }
 }
